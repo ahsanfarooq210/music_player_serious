@@ -14,6 +14,7 @@ import java.util.List;
 public class SongUtility
 {
     private static List<MusicFiles> musicFilesList;
+    public static boolean shuffleBoolean=false,repeatBoolean=false;
 
     public static List<MusicFiles> getMusicFilesList(Context context)
     {
@@ -74,6 +75,7 @@ public class SongUtility
                 String url = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 String album=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 Long albumId=cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                String id= cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
 
 
                 Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
@@ -86,12 +88,14 @@ public class SongUtility
                 musicFiles.setPath(url);
                 musicFiles.setAlbum(album);
                 musicFiles.setDuration(duration);
+                musicFiles.setId(id);
 
 
                 list.add(musicFiles);
 
             } while (cursor.moveToNext());
         }
+        assert cursor != null;
         cursor.close();
 
         return list;

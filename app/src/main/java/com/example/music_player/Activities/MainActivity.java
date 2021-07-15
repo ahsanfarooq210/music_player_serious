@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
 {
 
     private ArrayList<MusicFiles> musicFiles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
