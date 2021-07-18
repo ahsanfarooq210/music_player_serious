@@ -53,7 +53,7 @@ public class SongUtility
         return Uri.EMPTY;
     }
 
-    public static List<MusicFiles> getAudioFiles(Context context)
+    private static List<MusicFiles> getAudioFiles(Context context)
     {
         List<MusicFiles> list=new ArrayList<>();
         ContentResolver contentResolver = context.getContentResolver();

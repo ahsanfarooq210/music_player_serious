@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.example.music_player.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder>
@@ -44,7 +42,7 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view=LayoutInflater.from(context).inflate(R.layout.music_items,parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.music_items, parent, false);
         return new ViewHolder(view);
     }
 
@@ -52,22 +50,29 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         holder.fileName.setText(mfiles.get(position).getTitle());
-        byte[] image=getAlbumArt(mfiles.get(position).getPath());
-        if(image!=null)
+        byte[] image = null;
+        try
+        {
+            image = getAlbumArt(mfiles.get(position).getPath());
+        }
+        catch (Exception ignore)
+        {
+            
+        }
+        if (image != null)
         {
             Glide.with(context).asBitmap().load(image).into(holder.albumArt);
-        }
-        else
+        } else
         {
-           Glide.with(context).load(R.drawable.icons8_music_200px).into(holder.albumArt);
+            Glide.with(context).load(R.drawable.icons8_music_200px).into(holder.albumArt);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent=new Intent(context, PlayerActivity.class);
-                intent.putExtra("position",position);
+                Intent intent = new Intent(context, PlayerActivity.class);
+                intent.putExtra("position", position);
                 context.startActivity(intent);
             }
         });
@@ -76,8 +81,8 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
             @Override
             public void onClick(final View v)
             {
-                PopupMenu popupMenu=new PopupMenu(context, v);
-                popupMenu.getMenuInflater().inflate(R.menu.popup,popupMenu.getMenu());
+                PopupMenu popupMenu = new PopupMenu(context, v);
+                popupMenu.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
                 popupMenu.show();
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
                 {
@@ -87,8 +92,8 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
                         switch (item.getItemId())
                         {
                             case R.id.delete:
-                                Toast.makeText(context,"Item deleted",Toast.LENGTH_SHORT).show();
-                                deleteFile(position,v);
+                                Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
+                                deleteFile(position, v);
                                 break;
 
                         }
@@ -99,22 +104,22 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
         });
 
     }
+
     private void deleteFile(int position, View v)
     {
-        Uri contentUri=ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,Long.parseLong(mfiles.get(position).getId()));
-        File file=new File(mfiles.get(position).getPath());
-        boolean deleted=file.delete();//deleted your file
-        if(deleted)
+        Uri contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.parseLong(mfiles.get(position).getId()));
+        File file = new File(mfiles.get(position).getPath());
+        boolean deleted = file.delete();//deleted your file
+        if (deleted)
         {
-            context.getContentResolver().delete(contentUri,null,null);
+            context.getContentResolver().delete(contentUri, null, null);
             mfiles.remove(position);
             notifyItemRemoved(position);
-            notifyItemChanged(position,mfiles.size());
-            Snackbar.make(v,"File Deleted",Snackbar.LENGTH_SHORT).show();
-        }
-        else
+            notifyItemChanged(position, mfiles.size());
+            Snackbar.make(v, "File Deleted", Snackbar.LENGTH_SHORT).show();
+        } else
         {
-            Snackbar.make(v,"File can't be Deleted",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(v, "File can't be Deleted", Snackbar.LENGTH_SHORT).show();
         }
 
 
@@ -126,26 +131,26 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
         return mfiles.size();
     }
 
+    private byte[] getAlbumArt(String uri)
+    {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(uri);
+        byte[] art = retriever.getEmbeddedPicture();
+        retriever.release();
+        return art;
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder
     {
-        private ImageView albumArt ;
-        private TextView fileName,menuMore;
+        private ImageView albumArt, menuMore;
+        private TextView fileName;
 
         public ViewHolder(@NonNull View itemView)
         {
             super(itemView);
-            albumArt=itemView.findViewById(R.id.music_img);
-            fileName=itemView.findViewById(R.id.music_file_name);
-            menuMore=itemView.findViewById(R.id.menu_more);
+            albumArt = itemView.findViewById(R.id.music_img);
+            fileName = itemView.findViewById(R.id.music_file_name);
+            menuMore = itemView.findViewById(R.id.menu_more);
         }
-    }
-    private byte[] getAlbumArt(String uri)
-    {
-        MediaMetadataRetriever retriever=new MediaMetadataRetriever();
-        retriever.setDataSource(uri);
-        byte[] art=retriever.getEmbeddedPicture();
-        retriever.release();
-        return  art;
     }
 }

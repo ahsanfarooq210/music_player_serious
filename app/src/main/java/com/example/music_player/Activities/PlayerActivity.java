@@ -432,7 +432,12 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     private void getIntentMethod()
     {
         position = getIntent().getIntExtra("position", -1);
-        listSongs = (ArrayList<MusicFiles>) SongUtility.getAudioFiles(PlayerActivity.this);
+        String sender=getIntent().getStringExtra("sender");
+        if(sender!=null&&sender.equals("albumDetails"));
+        {
+
+        }
+        listSongs = (ArrayList<MusicFiles>) SongUtility.getMusicFilesList(PlayerActivity.this);
         if (listSongs != null)
         {
             playPauseBtn.setImageResource(R.drawable.ic_baseline_pause_24);
@@ -490,6 +495,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 @Override
                 public void onGenerated(@Nullable Palette palette)
                 {
+                    assert palette != null;
                     Palette.Swatch swatch=palette.getDominantSwatch();
                     if(swatch!=null)
                     {

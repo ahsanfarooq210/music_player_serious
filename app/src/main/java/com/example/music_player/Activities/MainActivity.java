@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
                 if(multiplePermissionsReport.areAllPermissionsGranted())
                 {
 
-                    musicFiles= (ArrayList<MusicFiles>) SongUtility.getAudioFiles(MainActivity.this);
+                    musicFiles= (ArrayList<MusicFiles>) SongUtility.getMusicFilesList(MainActivity.this);
                     intiViewPager();
                 }
                 else
