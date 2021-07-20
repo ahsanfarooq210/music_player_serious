@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.music_player.Activities.MainActivity;
 import com.example.music_player.Adapters.AlbumAdapter;
 import com.example.music_player.Adapters.MusicAdapters;
 import com.example.music_player.Entity.MusicFiles;
@@ -44,7 +45,7 @@ public class AlbumFragment extends Fragment
         recyclerView=v.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        albumAdapter=new AlbumAdapter( getContext(), (ArrayList<MusicFiles>) SongUtility.getMusicFilesList(getContext()));
+        albumAdapter=new AlbumAdapter( getContext(), MainActivity.albums);
         recyclerView.setAdapter(albumAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
 

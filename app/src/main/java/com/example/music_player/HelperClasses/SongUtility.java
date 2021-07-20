@@ -11,10 +11,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.music_player.Activities.MainActivity.albums;
+
 public class SongUtility
 {
     private static List<MusicFiles> musicFilesList;
     public static boolean shuffleBoolean=false,repeatBoolean=false;
+    public static ArrayList<String> duplicate;
 
     public static List<MusicFiles> getMusicFilesList(Context context)
     {
@@ -56,6 +59,9 @@ public class SongUtility
     private static List<MusicFiles> getAudioFiles(Context context)
     {
         List<MusicFiles> list=new ArrayList<>();
+        duplicate=new ArrayList<>();
+
+
         ContentResolver contentResolver = context.getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor = contentResolver.query(uri, null, null, null, null);
@@ -92,6 +98,12 @@ public class SongUtility
 
 
                 list.add(musicFiles);
+                if(!duplicate.contains(album))
+                {
+                    albums.add(musicFiles);
+                    duplicate.add(album);
+                }
+
 
             } while (cursor.moveToNext());
         }
