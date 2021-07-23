@@ -3,6 +3,7 @@ package com.example.music_player.HelperClasses;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -18,6 +19,7 @@ public class SongUtility
     private static List<MusicFiles> musicFilesList;
     public static boolean shuffleBoolean=false,repeatBoolean=false;
     public static ArrayList<String> duplicate;
+    private static final String MY_SORT_PREFERANCE="sortOrder";
 
     public static List<MusicFiles> getMusicFilesList(Context context)
     {
@@ -64,8 +66,26 @@ public class SongUtility
 
         ContentResolver contentResolver = context.getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = contentResolver.query(uri, null, null, null, null);
+
         //looping through all rows and adding to list
+        SharedPreferences preferences= context.getSharedPreferences(MY_SORT_PREFERANCE,Context.MODE_PRIVATE);
+        String sortOrder=preferences.getString("Sorting","sortByName");
+        String order=null;
+        switch (sortOrder)
+        {
+            case "sortByName":
+                order=MediaStore.MediaColumns.DISPLAY_NAME+"ASC";
+                break;
+
+            case "sortByDate":
+                order=MediaStore.MediaColumns.DATE_ADDED+"ASC";
+                break;
+
+            case "sortBySize":
+                order=MediaStore.MediaColumns.SIZE+"DESC";
+                break;
+        }
+        Cursor cursor = contentResolver.query(uri, null, null, null, order) ;
         if (cursor != null && cursor.moveToFirst())
         {
             do

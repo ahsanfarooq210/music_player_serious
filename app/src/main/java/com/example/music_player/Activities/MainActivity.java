@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,8 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private ArrayList<MusicFiles> musicFiles;
     public static ArrayList<MusicFiles> albums=new ArrayList<>();
+    private String MY_SORT_PREFERANCE="sortOrder";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -158,5 +162,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         SongsFragment.musicAdapters.updateList(myFiles);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull @NotNull MenuItem item)
+    {
+        SharedPreferences.Editor editor=getSharedPreferences(MY_SORT_PREFERANCE,MODE_PRIVATE).edit();
+        switch (item.getItemId())
+        {
+            case R.id.sort_by_name:
+                editor.putString("Sorting","sortByName");
+                editor.apply();
+                this.recreate();
+                break;
+
+            case R.id.sort_by_date:
+                editor.putString("Sorting","sortByDate");
+                editor.apply();
+                this.recreate();
+                break;
+
+            case R.id.sort_by_size:
+                editor.putString("Sorting","sortBySize");
+                editor.apply();
+                this.recreate();
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
