@@ -85,7 +85,7 @@ public class SongUtility
                 order=MediaStore.MediaColumns.SIZE+"DESC";
                 break;
         }
-        Cursor cursor = contentResolver.query(uri, null, null, null, order) ;
+        Cursor cursor = contentResolver.query(uri, null, null, null, null) ;
         if (cursor != null && cursor.moveToFirst())
         {
             do

@@ -23,7 +23,6 @@ public class ApplicationClass extends Application
     {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            CharSequence name;
             NotificationChannel channel1=new NotificationChannel(CHANNEL_ID_1, "Channel(1)", NotificationManager.IMPORTANCE_HIGH);
             channel1.setDescription("Channel 1 desc .....");
             NotificationChannel channel2= new NotificationChannel(CHANNEL_ID_2, "Channel(2)", NotificationManager.IMPORTANCE_HIGH);
