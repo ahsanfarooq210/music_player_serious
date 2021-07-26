@@ -1,6 +1,7 @@
 package com.example.music_player.Activities;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -12,7 +13,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaMetadataRetriever;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,9 +32,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
+import com.example.music_player.BrodcastReceiver.NotifAction;
 import com.example.music_player.BrodcastReceiver.NotificationReceiver;
 import com.example.music_player.Entity.MusicFiles;
 import com.example.music_player.HelperClasses.SongUtility;
@@ -70,8 +75,8 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "My Audio");
         initViews();
+        mediaSessionCompat = new MediaSessionCompat(getBaseContext(), "My Audio");
         getIntentMethod();
 
 
@@ -639,7 +644,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         Intent prevIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_PREVIOUS);
-        PendingIntent prevPending = PendingIntent.getActivity(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent prevPending = PendingIntent.getBroadcast(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent pauseIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_PLAY);
         PendingIntent pausePending = PendingIntent.getBroadcast(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -653,32 +658,123 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
             picture = getAlbumArt(listSongs.get(position).getPath());
         } catch (Exception ignored)
         {
-
         }
-        Bitmap thumb = null;
+
+        Bitmap thumb;
         if (picture != null)
         {
             thumb = BitmapFactory.decodeByteArray(picture, 0, picture.length);
         } else
         {
-            thumb = BitmapFactory.decodeResource(getResources(), R.drawable.icons8_music_200px);
+            thumb = BitmapFactory.decodeResource(getResources(), R.drawable.icon_music);
         }
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID_1).setSmallIcon(playPauseBtn)
                 .setLargeIcon(thumb)
                 .setContentTitle(listSongs.get(position).getTitle())
                 .setContentText(listSongs.get(position).getArtist())
                 .addAction(R.drawable.ic_baseline_skip_previous_24, "Previous", prevPending)
-                .addAction(R.drawable.ic_baseline_skip_next_24, "Next", nextPending)
                 .addAction(playPauseBtn, "pause", pausePending)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSessionCompat.getSessionToken()))
+                .addAction(R.drawable.ic_baseline_skip_next_24, "Next", nextPending)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setOnlyAlertOnce(true)
                 .setContentIntent(contentIntent)
                 .build();
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        notificationManager.notify(0, notification);
+        NotificationManagerCompat.from(PlayerActivity.this).notify(0, notification);
+        Toast.makeText(PlayerActivity.this, "Nitification created", Toast.LENGTH_SHORT).show();
+       // getNotification(playPauseBtn);
 
     }
+
+//    public void getNotification(int playPauseBtn)
+//    {
+//
+//        int notifId = new Random().nextInt(500);   //get random id
+//        NotificationManager notificationManager;
+//        Notification notification;
+//        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        Intent intent = new Intent(this, PlayerActivity.class);
+//        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
+//
+//        Intent prevIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_PREVIOUS);
+//        PendingIntent prevPending = PendingIntent.getBroadcast(this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        Intent pauseIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_PLAY);
+//        PendingIntent pausePending = PendingIntent.getBroadcast(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        Intent nextIntent = new Intent(this, NotificationReceiver.class).setAction(ACTION_NEXT);
+//        PendingIntent nextPending = PendingIntent.getBroadcast(this, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+//        {
+//
+//            String channelName = "Channel(1)";
+//            String channelDesc = "Channel 1 desc .....";
+//            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID_1, channelName, NotificationManager.IMPORTANCE_HIGH);
+//            notificationChannel.setDescription(channelDesc);
+//            notificationChannel.enableLights(true);
+//            notificationChannel.setSound(null, null);
+//            notificationChannel.setLightColor(Color.GREEN);
+//            notificationManager.createNotificationChannel(notificationChannel);
+//
+//        }
+//        byte[] picture = null;
+//        try
+//        {
+//            picture = getAlbumArt(listSongs.get(position).getPath());
+//        } catch (Exception ignored)
+//        {
+//        }
+//
+//        Bitmap thumb;
+//        if (picture != null)
+//        {
+//            thumb = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+//        } else
+//        {
+//            thumb = BitmapFactory.decodeResource(getResources(), R.drawable.icon_music);
+//        }
+//
+//        RingtoneManager.getRingtone(PlayerActivity.this,
+//                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).play();
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(PlayerActivity.this, CHANNEL_ID_1)
+//                .setSmallIcon(playPauseBtn)
+//                .setLargeIcon(thumb)
+//                .setContentTitle(listSongs.get(position).getTitle())
+//                .setContentText(listSongs.get(position).getArtist())
+//                .addAction(R.drawable.ic_baseline_skip_previous_24, "Previous", prevPending)
+//                .addAction(R.drawable.ic_baseline_skip_next_24, "Next", nextPending)
+//                .addAction(playPauseBtn, "pause", pausePending)
+//
+//                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+//
+//        Intent actionReadMessage = new Intent(PlayerActivity.this, NotifAction.class);
+//        actionReadMessage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        actionReadMessage.setAction("Play");
+//        actionReadMessage.putExtra("NotifId", notifId);
+//        PendingIntent playPendingIntent = PendingIntent.getBroadcast(PlayerActivity.this, notifId, actionReadMessage, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//
+//        Intent mainAction = new Intent(PlayerActivity.this, NotifAction.class);
+//        mainAction.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        mainAction.setAction("Pause");
+//        mainAction.putExtra("NotifId", notifId);
+//        PendingIntent PausePendingIntent = PendingIntent.getBroadcast(PlayerActivity.this, notifId, mainAction, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//
+//        builder.setContentIntent(PausePendingIntent);
+//        builder.addAction(R.mipmap.ic_launcher, "Play", playPendingIntent);
+//        builder.addAction(R.mipmap.ic_launcher, "Pause", PausePendingIntent);
+//
+//        notification = builder.build();
+//        notificationManager.notify(notifId, notification);
+//
+//
+//    }
+
 
     private byte[] getAlbumArt(String uri)
     {
