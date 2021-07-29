@@ -552,7 +552,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
             });
         } else
         {
-            Glide.with(this).asBitmap().load(R.drawable.icons8_music_200px).into(coverArt);
+            Glide.with(PlayerActivity.this).load(R.drawable.icons8_music_200px).into(coverArt);
             ImageView gradient = findViewById(R.id.imageViewGradient);
             RelativeLayout mContainer = findViewById(R.id.mContainer);
             gradient.setBackgroundResource(R.drawable.gradiant_bg);

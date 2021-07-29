@@ -1,6 +1,7 @@
 package com.example.music_player.Services;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -38,11 +39,11 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     public static final String MUSIC_FILE = "STORED_MUSIC";
     public static final String ARTIST_NAME = "ARTIST NAME";
     public static final String SONG_NAME = "SONG NAME";
+    public ArrayList<MusicFiles> musicFiles = new ArrayList<>();
+    public int position = -1;
     MyBinder mBinder = new MyBinder();
     MediaPlayer mediaPlayer;
-    public ArrayList<MusicFiles> musicFiles = new ArrayList<>();
     Uri uri;
-    public int position = -1;
     ActionPlay actionPlay;
 
     @Override
@@ -238,9 +239,10 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                 .setContentIntent(contentIntent)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .build();
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//        notificationManager.notify(0, notification);
-        startForeground(0, notification);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+       // startForeground(0, notification);
+        Toast.makeText(this, "Notification Created", Toast.LENGTH_SHORT).show();
         // getNotification(playPauseBtn);
 
     }
