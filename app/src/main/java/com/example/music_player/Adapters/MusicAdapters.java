@@ -1,5 +1,6 @@
 package com.example.music_player.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -47,7 +48,7 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position)
     {
         holder.fileName.setText(mfiles.get(position).getTitle());
         byte[] image = null;
@@ -64,7 +65,7 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
             Glide.with(context).asBitmap().load(image).into(holder.albumArt);
         } else
         {
-            Glide.with(context).load(R.drawable.icons8_music_200px).into(holder.albumArt);
+            Glide.with(context).load(R.drawable.icons8_music_128px).into(holder.albumArt);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {

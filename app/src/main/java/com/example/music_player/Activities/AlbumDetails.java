@@ -56,7 +56,7 @@ public class AlbumDetails extends AppCompatActivity
             Glide.with(this).load(image).into(albumPhoto);
         } else
         {
-            Glide.with(this).load(R.drawable.icons8_music_200px).into(albumPhoto);
+            Glide.with(this).load(R.drawable.icons8_music_128px).into(albumPhoto);
         }
     }
 

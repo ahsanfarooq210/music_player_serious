@@ -1,5 +1,8 @@
 package com.example.music_player.Activities;
 
+import static com.example.music_player.Adapters.AlbumDetailsAdapter.albumFiles;
+import static com.example.music_player.Adapters.MusicAdapters.mfiles;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -38,9 +41,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import static com.example.music_player.Adapters.AlbumDetailsAdapter.albumFiles;
-import static com.example.music_player.Adapters.MusicAdapters.mfiles;
 
 public class PlayerActivity extends AppCompatActivity implements ActionPlay, ServiceConnection
 {
@@ -552,7 +552,12 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
             });
         } else
         {
-            Glide.with(PlayerActivity.this).load(R.drawable.icons8_music_200px).into(coverArt);
+            try
+            {
+                Glide.with(PlayerActivity.this).load(R.drawable.icons8_music_128px).into(coverArt);
+            } catch (Exception ignored)
+            {
+            }
             ImageView gradient = findViewById(R.id.imageViewGradient);
             RelativeLayout mContainer = findViewById(R.id.mContainer);
             gradient.setBackgroundResource(R.drawable.gradiant_bg);
@@ -633,8 +638,6 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
     {
         musicService = null;
     }
-
-
 
 
 }
