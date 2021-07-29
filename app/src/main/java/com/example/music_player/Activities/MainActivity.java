@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.example.music_player.Entity.MusicFiles;
 import com.example.music_player.Fragment.AlbumFragment;
@@ -32,12 +33,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.music_player.Services.MusicService.MUSIC_FILE;
+import static com.example.music_player.Services.MusicService.MUSIC_FILES_LASTT_PLAYED;
+
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener
 {
 
     private ArrayList<MusicFiles> musicFiles;
     public static ArrayList<MusicFiles> albums=new ArrayList<>();
     private String MY_SORT_PREFERANCE="sortOrder";
+    public static boolean SHOW_MINI_PLAYER =false;
+    public static String PATH_TO_FRAG=null;
+    public static String ARTIST_PATH_TO_FRAG=null;
+    public static String SONG_PATH_TO_FRAG=null;
+    public static final String ARTIST_NAME="ARTIST NAME";
+    public static final String SONG_NAME="SONG NAME";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         viewPagerAdapter.addFragments(new AlbumFragment(),"Albums");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
+
 
 
 
@@ -191,5 +205,32 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        SharedPreferences preferences=getSharedPreferences(MUSIC_FILES_LASTT_PLAYED,MODE_PRIVATE);
+        String path=preferences.getString(MUSIC_FILE,null);
+        String artist=preferences.getString(ARTIST_NAME,null);
+        String song_name=preferences.getString(SONG_NAME,null);
+
+        if(path!=null)
+        {
+            SHOW_MINI_PLAYER=true;
+            PATH_TO_FRAG=path;
+            ARTIST_PATH_TO_FRAG=artist;
+            SONG_PATH_TO_FRAG=song_name;
+
+        }
+        else
+        {
+            SHOW_MINI_PLAYER=false;
+            PATH_TO_FRAG=null;
+            ARTIST_PATH_TO_FRAG=null;
+            SONG_PATH_TO_FRAG=null;
+
+        }
     }
 }

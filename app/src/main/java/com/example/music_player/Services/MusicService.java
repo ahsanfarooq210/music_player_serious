@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.example.music_player.Activities.PlayerActivity;
 import com.example.music_player.BrodcastReceiver.NotificationReceiver;
@@ -34,11 +34,15 @@ import static com.example.music_player.HelperClasses.ApplicationClass.CHANNEL_ID
 
 public class MusicService extends Service implements MediaPlayer.OnCompletionListener
 {
+    public static final String MUSIC_FILES_LASTT_PLAYED = "LAST_PLAYED";
+    public static final String MUSIC_FILE = "STORED_MUSIC";
+    public static final String ARTIST_NAME = "ARTIST NAME";
+    public static final String SONG_NAME = "SONG NAME";
     MyBinder mBinder = new MyBinder();
     MediaPlayer mediaPlayer;
-    ArrayList<MusicFiles> musicFiles = new ArrayList<>();
+    public ArrayList<MusicFiles> musicFiles = new ArrayList<>();
     Uri uri;
-    int position = -1;
+    public int position = -1;
     ActionPlay actionPlay;
 
     @Override
@@ -72,27 +76,18 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
             {
                 case "playPause":
                     Toast.makeText(this, "play pause", Toast.LENGTH_SHORT).show();
-                    if (actionPlay != null)
-                    {
-                        actionPlay.playPauseBtnClicked();
-                    }
+                    playPauseBtnClicked();
                     break;
 
                 case "next":
                     Toast.makeText(this, "next", Toast.LENGTH_SHORT).show();
-                    if (actionPlay != null)
-                    {
-                        actionPlay.nextBtnClicked();
-                    }
+                    nextBtnClicked();
                     break;
 
 
                 case "previous":
-                    Toast.makeText(this, "previous", Toast.LENGTH_SHORT).show();
-                    if (actionPlay != null)
-                    {
-                        actionPlay.prevBtnClicked();
-                    }
+                    previousBtnClicked();
+
                     break;
 
             }
@@ -162,8 +157,13 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
 
     public void createMediaPlayer(int positionInner)
     {
-        positionInner = positionInner;
+        position = positionInner;
         uri = Uri.parse(musicFiles.get(position).getPath());
+        SharedPreferences.Editor editor = getSharedPreferences(MUSIC_FILES_LASTT_PLAYED, MODE_PRIVATE).edit();
+        editor.putString(MUSIC_FILE, uri.toString());
+        editor.putString(ARTIST_NAME, musicFiles.get(position).getArtist());
+        editor.putString(SONG_NAME, musicFiles.get(position).getTitle());
+        editor.apply();
         mediaPlayer = MediaPlayer.create(getBaseContext(), uri);
     }
 
@@ -240,7 +240,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                 .build();
 //        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 //        notificationManager.notify(0, notification);
-            startForeground(0,notification);
+        startForeground(0, notification);
         // getNotification(playPauseBtn);
 
     }
@@ -254,6 +254,31 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         return art;
     }
 
+    public void playPauseBtnClicked()
+    {
+        if (actionPlay != null)
+        {
+            actionPlay.playPauseBtnClicked();
+        }
+    }
+
+    public void previousBtnClicked()
+    {
+        Toast.makeText(this, "previous", Toast.LENGTH_SHORT).show();
+        if (actionPlay != null)
+        {
+            actionPlay.prevBtnClicked();
+        }
+    }
+
+    public void nextBtnClicked()
+    {
+        if (actionPlay != null)
+        {
+            actionPlay.nextBtnClicked();
+        }
+    }
+
     public class MyBinder extends Binder
     {
         public MusicService getService()
@@ -261,5 +286,4 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
             return MusicService.this;
         }
     }
-
 }
