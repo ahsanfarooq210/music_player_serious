@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.music_player.Activities.PlayerActivity;
 import com.example.music_player.Entity.MusicFiles;
+import com.example.music_player.Interfaces.ShowHideNowPlayingFragment;
 import com.example.music_player.R;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -75,6 +76,8 @@ public class MusicAdapters extends RecyclerView.Adapter<MusicAdapters.ViewHolder
                 Intent intent = new Intent(context, PlayerActivity.class);
                 intent.putExtra("position", position);
                 context.startActivity(intent);
+                ShowHideNowPlayingFragment showHideNowPlayingFragment = (ShowHideNowPlayingFragment) context;
+                showHideNowPlayingFragment.show();
             }
         });
         holder.menuMore.setOnClickListener(new View.OnClickListener()

@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#111111"
-    android:layout_marginTop="10dp"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/music_files_layout_bg"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:id="@+id/audio_items">
 
-    android:id="@+id/audio_items">
-
-    <ImageView
-        android:id="@+id/music_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:padding="5dp"
-        android:scaleType="center"/>
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="File name"
-         android:layout_toEndOf="@id/music_img"
-         android:layout_marginStart="10dp"
-         android:layout_centerVertical="true"
-         android:textColor="@color/white"
-         android:layout_toStartOf="@id/menu_more"
-         android:id="@+id/music_file_name"/>
-    <ImageView
-        android:id="@+id/menu_more"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:padding="5dp"
-        android:src="@drawable/ic_baseline_more"
-        android:scaleType="center"
-        android:layout_alignParentEnd="true"/>
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/music_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="5dp"
+            android:scaleType="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="File name"
+            android:layout_toEndOf="@id/music_img"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:layout_toStartOf="@id/menu_more"
+            android:id="@+id/music_file_name"/>
+        <ImageView
+            android:id="@+id/menu_more"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_baseline_more"
+            android:scaleType="center"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

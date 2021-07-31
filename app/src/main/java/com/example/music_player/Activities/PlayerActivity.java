@@ -10,6 +10,8 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -29,15 +31,20 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.palette.graphics.Palette;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.music_player.Entity.MusicFiles;
 import com.example.music_player.HelperClasses.SongUtility;
 import com.example.music_player.Interfaces.ActionPlay;
 import com.example.music_player.R;
 import com.example.music_player.Services.MusicService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -50,7 +57,8 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
     //  MediaSessionCompat mediaSessionCompat;
     //private static MediaPlayer mediaPlayer;
     private TextView songName, artistName, durationPlayed, durationTotal;
-    private ImageView coverArt, nextBtn, prevBtn, shuffleBtn, menuBtn, repeatBtn;
+    private RoundedImageView coverArt;
+    private ImageView  nextBtn, prevBtn, shuffleBtn, menuBtn, repeatBtn;
     private SeekBar seekBar;
     private FloatingActionButton playPauseBtn;
     private int position = -1;
@@ -178,6 +186,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
                     @Override
                     public void onClick(View v)
                     {
+                        YoYo.with(Techniques.Bounce).duration(500).repeat(1).playOn(v);
                         prevBtnClicked();
                     }
                 });
@@ -279,6 +288,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
                     @Override
                     public void onClick(View v)
                     {
+                        YoYo.with(Techniques.Bounce).duration(500).repeat(1).playOn(v);
                         nextBtnClicked();
                     }
                 });
@@ -389,6 +399,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
                     @Override
                     public void onClick(View v)
                     {
+                        YoYo.with(Techniques.Bounce).duration(500).repeat(1).playOn(v);
                         playPauseBtnClicked();
                     }
                 });
@@ -523,29 +534,65 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
                     Palette.Swatch swatch = palette.getDominantSwatch();
                     if (swatch != null)
                     {
-                        ImageView gradient = findViewById(R.id.imageViewGradient);
+                       // ImageView gradient = findViewById(R.id.imageViewGradient);
                         RelativeLayout mContainer = findViewById(R.id.mContainer);
-                        gradient.setBackgroundResource(R.drawable.gradiant_bg);
+                       // gradient.setBackgroundResource(R.drawable.gradiant_bg);
                         mContainer.setBackgroundResource(R.drawable.main_bg);
+                        mContainer.setBackgroundColor(swatch.getRgb());
                         GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{swatch.getRgb(), 0x00000000});
-                        gradient.setBackground(gradientDrawable);
+                        gradientDrawable.setCornerRadius(50.0f);
+                       // gradient.setBackground(gradientDrawable);
 
                         GradientDrawable gradientDrawableBg = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{swatch.getRgb(), swatch.getRgb()});
+                        gradientDrawableBg.setCornerRadius(50.0f);
                         mContainer.setBackground(gradientDrawableBg);
                         songName.setTextColor(swatch.getTitleTextColor());
+                        //playPauseBtn.setBackgroundColor(swatch.getTitleTextColor());
+
+                        //setting the color of the next button
+                        Drawable nextUnwrappedDrawable = AppCompatResources.getDrawable(PlayerActivity.this, R.drawable.ic_baseline_skip_next_24);
+                        assert nextUnwrappedDrawable != null;
+                        Drawable nextWrappedDrawable = DrawableCompat.wrap(nextUnwrappedDrawable);
+                        DrawableCompat.setTint(nextWrappedDrawable, swatch.getTitleTextColor());
+
+                        //setting the color of the previous button
+                        Drawable previousUnwrappedDrawable = AppCompatResources.getDrawable(PlayerActivity.this, R.drawable.ic_baseline_skip_previous_24);
+                        assert previousUnwrappedDrawable != null;
+                        Drawable previousWrappedDrawable = DrawableCompat.wrap(previousUnwrappedDrawable);
+                        DrawableCompat.setTint(previousWrappedDrawable, swatch.getTitleTextColor());
+
+                        prevBtn.setImageDrawable(previousWrappedDrawable);
+                        nextBtn.setImageDrawable(nextWrappedDrawable);
+
                         artistName.setTextColor(swatch.getBodyTextColor());
                     } else
                     {
-                        ImageView gradient = findViewById(R.id.imageViewGradient);
+                       // ImageView gradient = findViewById(R.id.imageViewGradient);
                         RelativeLayout mContainer = findViewById(R.id.mContainer);
-                        gradient.setBackgroundResource(R.drawable.gradiant_bg);
+                      //  gradient.setBackgroundResource(R.drawable.gradiant_bg);
                         mContainer.setBackgroundResource(R.drawable.main_bg);
                         GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0xff000000, 0x00000000});
-                        gradient.setBackground(gradientDrawable);
+                     //   gradient.setBackground(gradientDrawable);
 
                         GradientDrawable gradientDrawableBg = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]{0xff000000, 0xff000000});
+                        gradientDrawableBg.setCornerRadius(50.0f);
                         mContainer.setBackground(gradientDrawableBg);
                         songName.setTextColor(Color.WHITE);
+                        //setting the color of the next button
+                        Drawable nextUnwrappedDrawable = AppCompatResources.getDrawable(PlayerActivity.this, R.drawable.ic_baseline_skip_next_24);
+                        assert nextUnwrappedDrawable != null;
+                        Drawable nextWrappedDrawable = DrawableCompat.wrap(nextUnwrappedDrawable);
+                        DrawableCompat.setTint(nextWrappedDrawable, Color.WHITE);
+
+                        //setting the color of the previous button
+                        Drawable previousUnwrappedDrawable = AppCompatResources.getDrawable(PlayerActivity.this, R.drawable.ic_baseline_skip_previous_24);
+                        assert previousUnwrappedDrawable != null;
+                        Drawable previousWrappedDrawable = DrawableCompat.wrap(previousUnwrappedDrawable);
+                        DrawableCompat.setTint(previousWrappedDrawable, Color.WHITE);
+
+                        prevBtn.setImageDrawable(previousWrappedDrawable);
+                        nextBtn.setImageDrawable(nextWrappedDrawable);
+
                         artistName.setTextColor(Color.DKGRAY);
                     }
                 }
@@ -558,11 +605,26 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
             } catch (Exception ignored)
             {
             }
-            ImageView gradient = findViewById(R.id.imageViewGradient);
+           // ImageView gradient = findViewById(R.id.imageViewGradient);
             RelativeLayout mContainer = findViewById(R.id.mContainer);
-            gradient.setBackgroundResource(R.drawable.gradiant_bg);
+          //  gradient.setBackgroundResource(R.drawable.gradiant_bg);
             mContainer.setBackgroundResource(R.drawable.main_bg);
             songName.setTextColor(Color.WHITE);
+
+            //setting the color of the next button
+            Drawable nextUnwrappedDrawable = AppCompatResources.getDrawable(PlayerActivity.this, R.drawable.ic_baseline_skip_next_24);
+            assert nextUnwrappedDrawable != null;
+            Drawable nextWrappedDrawable = DrawableCompat.wrap(nextUnwrappedDrawable);
+            DrawableCompat.setTint(nextWrappedDrawable, Color.WHITE);
+
+            //setting the color of the previous button
+            Drawable previousUnwrappedDrawable = AppCompatResources.getDrawable(PlayerActivity.this, R.drawable.ic_baseline_skip_previous_24);
+            assert previousUnwrappedDrawable != null;
+            Drawable previousWrappedDrawable = DrawableCompat.wrap(previousUnwrappedDrawable);
+            DrawableCompat.setTint(previousWrappedDrawable, Color.WHITE);
+
+            prevBtn.setImageDrawable(previousWrappedDrawable);
+            nextBtn.setImageDrawable(nextWrappedDrawable);
             artistName.setTextColor(Color.DKGRAY);
 
         }

@@ -14,12 +14,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.music_player.Entity.MusicFiles;
 import com.example.music_player.Fragment.AlbumFragment;
 import com.example.music_player.Fragment.SongsFragment;
 import com.example.music_player.HelperClasses.SongUtility;
+import com.example.music_player.Interfaces.ShowHideNowPlayingFragment;
 import com.example.music_player.R;
 import com.google.android.material.tabs.TabLayout;
 import com.karumi.dexter.Dexter;
@@ -36,7 +38,7 @@ import java.util.List;
 import static com.example.music_player.Services.MusicService.MUSIC_FILE;
 import static com.example.music_player.Services.MusicService.MUSIC_FILES_LASTT_PLAYED;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, ShowHideNowPlayingFragment
 {
 
     private ArrayList<MusicFiles> musicFiles;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public static String SONG_PATH_TO_FRAG=null;
     public static final String ARTIST_NAME="ARTIST NAME";
     public static final String SONG_NAME="SONG NAME";
+    private FrameLayout fragBottomPlayer;
 
 
 
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fragBottomPlayer=findViewById(R.id.frag_bottom_player);
         askPermission();
 
     }
@@ -232,5 +236,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             SONG_PATH_TO_FRAG=null;
 
         }
+    }
+
+
+    @Override
+    public void show()
+    {
+        fragBottomPlayer.setVisibility(View.VISIBLE);
     }
 }

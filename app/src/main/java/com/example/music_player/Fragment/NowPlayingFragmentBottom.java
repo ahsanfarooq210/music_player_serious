@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.music_player.Interfaces.ShowHideNowPlayingFragment;
 import com.example.music_player.R;
 import com.example.music_player.Services.MusicService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,6 +47,7 @@ public class NowPlayingFragmentBottom extends Fragment implements ServiceConnect
     private View view;
     private String path;
     private MusicService musicService;
+ //   private FrameLayout frameLayout;
 
 
     public NowPlayingFragmentBottom()
@@ -65,6 +68,8 @@ public class NowPlayingFragmentBottom extends Fragment implements ServiceConnect
         albumart = view.findViewById(R.id.bottom_album_art);
         nextBtn = view.findViewById(R.id.skip_next_botom);
         playPauseBtn = view.findViewById(R.id.play_pause_mini_player);
+       // frameLayout= view.findViewById(R.id.now_playing_frame_layout);
+       // frameLayout.setVisibility(View.GONE);
 
         nextBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -224,4 +229,6 @@ public class NowPlayingFragmentBottom extends Fragment implements ServiceConnect
     {
         musicService = null;
     }
+
+
 }

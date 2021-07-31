@@ -9,16 +9,16 @@
 
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/design_default_color_primary_dark"
-        android:id="@+id/tab_layout"
+        app:tabIndicator="@drawable/tab_indicator"
+        app:tabIndicatorColor="@color/teal_700"
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorGravity="center"
-        app:tabTextColor="@color/design_default_color_on_primary"
         app:tabIndicatorHeight="40dp"
-        app:tabIndicatorColor="@color/teal_700"
-        app:tabIndicator="@drawable/tab_indicator"/>
+        app:tabTextColor="@color/design_default_color_on_primary" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
@@ -31,7 +31,8 @@
         android:id="@+id/frag_bottom_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
         <fragment
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

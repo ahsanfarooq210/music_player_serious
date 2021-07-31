@@ -79,7 +79,6 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                     Toast.makeText(this, "play pause", Toast.LENGTH_SHORT).show();
                     playPauseBtnClicked();
                     break;
-
                 case "next":
                     Toast.makeText(this, "next", Toast.LENGTH_SHORT).show();
                     nextBtnClicked();
