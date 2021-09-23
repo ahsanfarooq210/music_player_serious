@@ -515,7 +515,14 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
     private void metaData(Uri uri)
     {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(uri.toString());
+        try
+        {
+            retriever.setDataSource(uri.toString());
+        }
+        catch (Exception ignore)
+        {
+            Toast.makeText(this, "corrupted media cannot play", Toast.LENGTH_SHORT).show();
+        }
         int duraionTotal = Integer.parseInt(listSongs.get(position).getDuration()) / 1000;
         this.durationTotal.setText(formattedTime(duraionTotal));
         byte[] art = retriever.getEmbeddedPicture();
@@ -686,7 +693,14 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlay, Ser
         musicService = myBinder.getService();
         musicService.setCallback(this);
         Toast.makeText(this, "Connected" + musicService, Toast.LENGTH_SHORT).show();
-        seekBar.setMax(musicService.getDuration() / 1000);
+        try
+        {
+            seekBar.setMax(musicService.getDuration() / 1000);
+        }
+        catch (Exception ignore)
+        {
+            Toast.makeText(this, "corrupted media cannot play", Toast.LENGTH_SHORT).show();
+        }
         metaData(uri);
         songName.setText(listSongs.get(position).getTitle());
         artistName.setText(listSongs.get(position).getArtist());

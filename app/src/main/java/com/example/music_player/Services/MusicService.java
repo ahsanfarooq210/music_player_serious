@@ -69,7 +69,14 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         String actionName = intent.getStringExtra("ActionName");
         if (myPosition != -1)
         {
-            playMedia(myPosition);
+            try
+            {
+                playMedia(myPosition);
+            }
+            catch (Exception ignore)
+            {
+                Toast.makeText(this, "corrupted media cannot play", Toast.LENGTH_SHORT).show();
+            }
         }
         if (actionName != null)
         {
@@ -110,7 +117,14 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
             }
         } else
         {
-            createMediaPlayer(position);
+            try
+            {
+                createMediaPlayer(position);
+            }
+            catch (Exception ignore)
+            {
+                Toast.makeText(this, "corrupted media cannot play", Toast.LENGTH_SHORT).show();
+            }
             mediaPlayer.start();
         }
     }
@@ -158,7 +172,14 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     public void createMediaPlayer(int positionInner)
     {
         position = positionInner;
-        uri = Uri.parse(musicFiles.get(position).getPath());
+        try
+        {
+            uri = Uri.parse(musicFiles.get(position).getPath());
+        }
+        catch (Exception ignore)
+        {
+            Toast.makeText(this, "corrupted media cannot play", Toast.LENGTH_SHORT).show();
+        }
         SharedPreferences.Editor editor = getSharedPreferences(MUSIC_FILES_LASTT_PLAYED, MODE_PRIVATE).edit();
         editor.putString(MUSIC_FILE, uri.toString());
         editor.putString(ARTIST_NAME, musicFiles.get(position).getArtist());

@@ -203,7 +203,14 @@ public class NowPlayingFragmentBottom extends Fragment implements ServiceConnect
         super.onPause();
         if (getContext() != null)
         {
-            getContext().unbindService(this);
+            try
+            {
+                getContext().unbindService(this);
+            }
+            catch (Exception ignore)
+            {
+                Toast.makeText(getContext(), "corrupted media cannot play", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

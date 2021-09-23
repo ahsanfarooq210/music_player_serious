@@ -116,8 +116,10 @@ public class SongUtility
                 musicFiles.setDuration(duration);
                 musicFiles.setId(id);
 
-
-                list.add(musicFiles);
+                if(!title.equals("tone"))
+                {
+                    list.add(musicFiles);
+                }
                 if(!duplicate.contains(album))
                 {
                     albums.add(musicFiles);
